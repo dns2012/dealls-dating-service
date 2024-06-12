@@ -1,0 +1,86 @@
+syntax = "proto3";
+
+package v1;
+
+option go_package = "github.com/dns2012/dealls-dating-service/v1";
+
+import "schema/v1/constant.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "validate/validate.proto";
+import "google/protobuf/timestamp.proto";
+
+message User {
+  uint32 id = 1;
+  string nickname = 2;
+  string email = 3;
+  bool is_verified = 4;
+  google.protobuf.Timestamp premium_at = 5;
+  google.protobuf.Timestamp registered_at = 6;
+  string full_name = 7;
+  string image_url = 8;
+  string birth_at = 9;
+  Gender gender = 10;
+  string company = 11;
+  string job_title = 12;
+}
+
+message Page {
+  uint32 current = 1;
+  uint32 size = 2;
+  uint32 next = 3;
+  uint32 prev = 4;
+  uint32 count = 5;
+  uint32 rows_count = 6;
+}
+
+message ListUserRequest {
+  uint32 page = 1 [
+    (validate.rules).uint32.gt = 0,
+    (validate.rules).uint32.ignore_empty = false
+  ];
+  uint32 page_size = 2 [
+    (validate.rules).uint32.gt = 0,
+    (validate.rules).uint32.ignore_empty = false
+  ];
+}
+
+message ListUserResponse {
+  Page page = 1;
+  repeated User data = 2;
+}
+
+message CreateUserPreferenceRequest {
+  uint32 preference_user_id = 1 [
+    (validate.rules).uint32.gt = 0,
+    (validate.rules).uint32.ignore_empty = false
+  ];
+  PreferenceType preference_type = 2  [
+    (validate.rules).enum = {in: [1,2]}
+  ];
+}
+
+message UserResponse {
+  User data = 1;
+}
+
+service UserSchema {
+  rpc ListUser(ListUserRequest) returns (ListUserResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/users"
+    };
+  }
+
+  rpc CreateUserPreference(CreateUserPreferenceRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/api/v1/users:preference"
+      body: "*"
+    };
+  }
+
+  rpc Me(google.protobuf.Empty) returns (UserResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/me"
+    };
+  }
+}

@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package v1;
+
+option go_package = "github.com/dns2012/dealls-dating-service/v1";
+
+enum Gender {
+  UNKNOWN_GENDER = 0;
+  MALE = 1;
+  FEMALE = 2;
+}
+
+enum PreferenceType {
+  UNKNOWN_PREFERENCE_TYPE = 0;
+  PASS = 1;
+  LIKE = 2;
+}

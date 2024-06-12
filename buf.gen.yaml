@@ -1,0 +1,28 @@
+version: v1
+plugins:
+  - plugin: go
+    out: proto
+    opt:
+      - paths=source_relative
+  - plugin: go-grpc
+    out: proto
+    opt:
+      - paths=source_relative
+  - plugin: grpc-gateway
+    out: proto
+    opt:
+      - paths=source_relative
+      - generate_unbound_methods=true
+  - plugin: validate
+    out: proto
+    opt:
+      - paths=source_relative
+      - lang=go
+  - plugin: openapiv2
+    out: docs
+    opt:
+      - include_package_in_tags=true
+      - allow_merge=true
+      - merge_file_name=schema
+      - json_names_for_fields=false
+      - use_go_templates=true

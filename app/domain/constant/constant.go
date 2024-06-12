@@ -1,0 +1,10 @@
+package constant
+
+const(
+	DUMMY_IMAGE_URL = "https://picsum.photos/200/300"
+	PREFERENCE_QUOTA = 10
+	PREFERENCE_TYPE_PASS = 1
+	PREFERENCE_TYPE_LIKE = 2
+	GENDER_MALE = 1
+	GENDER_FEMALE = 2
+)

@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package v1;
+
+option go_package = "github.com/dns2012/dealls-dating-service/v1";
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "validate/validate.proto";
+
+message Package {
+  uint32 id = 1;
+  string name = 2;
+  string description = 3;
+  uint32 price = 4;
+  bool unlimited_swap = 5;
+  uint32 total_swap_per_day = 6;
+}
+
+message ListPackageResponse {
+  repeated Package data = 1;
+}
+
+message OrderPackageRequest {
+  uint32 id = 1 [
+    (validate.rules).uint32.gt = 0,
+    (validate.rules).uint32.ignore_empty = false
+  ];
+  uint32 total_payment = 2 [
+    (validate.rules).uint32.gt = 0,
+    (validate.rules).uint32.ignore_empty = false
+  ];
+}
+
+service PackageSchema {
+  rpc ListPackage(google.protobuf.Empty) returns (ListPackageResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/packages"
+    };
+  }
+
+  rpc OrderPackage(OrderPackageRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/api/v1/packages/{id}/order"
+      body: "*"
+    };
+  }
+}

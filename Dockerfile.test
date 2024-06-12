@@ -1,0 +1,9 @@
+FROM golang:1.21.3
+
+RUN go install gotest.tools/gotestsum@latest
+
+WORKDIR /workspace
+
+COPY . /workspace
+
+ENTRYPOINT ["sh", "-c", "gotestsum --format=short-verbose -- -covermode count ./app/controller ./app/usecase"]
